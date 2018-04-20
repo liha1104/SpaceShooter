@@ -12,7 +12,6 @@
 #include "Enemy.hpp"
 #include "Weapons.hpp"
 #include "Camera.hpp"
-//#include "Clock.hpp"
 
 
 class GameManager : public SceneObject
@@ -23,9 +22,13 @@ class GameManager : public SceneObject
     
     std::shared_ptr<Camera> getCam();
     std::shared_ptr<SpaceShip> getShip();
+    void setWeapon(Weapons::type_);
     void bulletFired();
+    void generateEnemy();
+    void enemyShoots(std::shared_ptr<Enemy>);
     boolean bullColl(glm::mat4, double, glm::mat4, double);
     boolean shipColl(glm::mat4, double, glm::mat4, double);
+    void invulnerability(std::shared_ptr<SpaceShip>);
 
   protected:
     virtual void privateInit();
@@ -40,7 +43,10 @@ class GameManager : public SceneObject
     std::shared_ptr<Enemy> enemy_;
     std::shared_ptr<Camera> cam_;
     std::shared_ptr<Weapons> weapon_;
+    Weapons::type_ shipWeapon_;
     clock_t endwait;
-    //siut::Clock clock_;
+    clock_t endwait2;
+    clock_t endwait3;
+    clock_t endwait4;
 };
 

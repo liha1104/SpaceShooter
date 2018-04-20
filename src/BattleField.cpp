@@ -19,7 +19,7 @@ void BattleField::privateInit()
     for (auto j = 0; j < 32; ++j) {
       auto x = j*X_LENGTH, z = i*Z_LENGTH;
       vertexArray_.push_back(glm::vec3{ x, y, -z });
-      texArray_.push_back(glm::vec2{x/512.0f, -(z+32)/32.0f});
+      texArray_.push_back(glm::vec2{i/511.0f, j/31.0f });
     }
   }
   for (glm::uint i = 1; i < 512; ++i) {
@@ -55,13 +55,14 @@ void BattleField::privateRender()
   // deactivate vertex arrays after drawing
   glDisable(GL_PRIMITIVE_RESTART);
   glDisable(GL_TEXTURE_2D);
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
 
 }
 
 void BattleField::privateUpdate()
 {
-  matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, 1.0f));
+  matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, 3.0f));
 }
 
 void BattleField::loadTex()
@@ -69,7 +70,7 @@ void BattleField::loadTex()
   /* load an image file directly as a new OpenGL texture */
   tex_2d = SOIL_load_OGL_texture
   (
-    "C:\\Users\\Victor\\Documents\\VS17 Projects\\AlienElimination\\AlienElimination\\textures\\lava.png",
+    "C:\\Users\\Victor\\Documents\\VS17 Projects\\AlienElimination\\AlienElimination\\textures\\lava2.png",
     SOIL_LOAD_AUTO,
     SOIL_CREATE_NEW_ID,
     SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT

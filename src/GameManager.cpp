@@ -29,9 +29,8 @@ void GameManager::privateInit()
   spaceship_.reset(new SpaceShip());
   this->addSubObject(spaceship_);
 
-  enemy_.reset(new Enemy());
-  enemies_.push_back(enemy_);
-  this->addSubObject(enemy_);
+  //PlaySound("C:\\Users\\Victor\\Documents\\VS17 Projects\\AlienElimination\\AlienElimination\\src\\loop.wav", NULL, SND_ASYNC | SND_FILENAME | SND_LOOP);
+
 
 }
 
@@ -51,48 +50,60 @@ void GameManager::privateUpdate()
   // to the game manager. Therefore, we set the game manager matrix equal to the camera matrix. 
   this->matrix_ = cam_->getMatrix();
 
+  boolean sd = false;
   for (auto en = enemies_.begin(); en != enemies_.end();) {
+
+    if ((*en)->getType() == Enemy::type_::shooterzz)
+      enemyShoots(*en);
     boolean c = false;
+
     for (auto it = bullets_.begin(); it != bullets_.end();) {
 
-      if ((*it)->getMatrix()[3].z >= -1100 && !bullColl((*it)->getMatrix(), 3, (*en)->getMatrix(), 6)) {
+
+      if (bullColl((*it)->getMatrix(), 3, spaceship_->getMatrix(), 6) && (*it)->getOwner() == Weapons::owner_::enemy) {
+        sd = true;
+        invulnerability(spaceship_);
+      }
+      if ((*it)->getMatrix()[3].z >= -1100 && !bullColl((*it)->getMatrix(), 3, (*en)->getMatrix(), 6) 
+        || (bullColl((*it)->getMatrix(), 3, (*en)->getMatrix(), 6) && (*it)->getOwner() == Weapons::owner_::enemy)) {
         it++;
         continue;
       }
-
-      else if ((*it)->getMatrix()[3].z <= -1100){
+      else if ((*it)->getMatrix()[3].z <= -1100 || (*it)->getMatrix()[3].z >= 0) {
         this->removeSubObject(*it);
         bullets_.erase(it);
         break;
       }
-      else if (bullColl((*it)->getMatrix(), 3, (*en)->getMatrix(), 6)) {
+      else if (bullColl((*it)->getMatrix(), 3, (*en)->getMatrix(), 6) && (*it)->getOwner() == Weapons::owner_::ship) {
         this->removeSubObject(*it);
         bullets_.erase(it);
         c = true;
         break;
       }
     }
-    if (!c)
+
+    if (sd && (*spaceship_).getLife() == 0) {
+      this->removeSubObject(spaceship_);
+    }
+
+    if (!c && !shipColl(spaceship_->getMatrix(), 5, (* en)->getMatrix(), 6)) {
       en++;
+      continue;
+    }
     else if (c) {
       this->removeSubObject(*en);
       enemies_.erase(en);
       break;
     }
- /*   else if (!shipColl(spaceship_->getMatrix(), 6, (*en)->getMatrix(), 6))
-      en++;
-    else if (shipColl(spaceship_->getMatrix(), 6, (*en)->getMatrix(), 6)) {
+    else if (shipColl(spaceship_->getMatrix(), 5, (*en)->getMatrix(), 6)) {
       this->removeSubObject(spaceship_);
       this->removeSubObject(*en);
       enemies_.erase(en);
       break;
-    }*/
-
-
-  }
-
-
-
+    }
+    
+  }  
+  generateEnemy();
 }
 
 
@@ -106,15 +117,57 @@ std::shared_ptr<SpaceShip> GameManager::getShip()
   return spaceship_;
 }
 
+void GameManager::setWeapon(Weapons::type_ sw)
+{
+  shipWeapon_ = sw;
+}
+
+void GameManager::invulnerability(std::shared_ptr<SpaceShip> s)
+{
+  if (clock() > endwait4) {
+  s->reduceLife();
+  endwait4 = clock() + 1 * CLOCKS_PER_SEC;
+  }
+}
 
 void GameManager::bulletFired()
 {
   if(clock() > endwait){
     weapon_.reset(new Weapons());
     this->addSubObject(weapon_);
+    weapon_->setOwner(Weapons::owner_::ship);
+    weapon_->setType(shipWeapon_);
     bullets_.push_back(weapon_);
     weapon_->getMatrix() = spaceship_->getMatrix();
+    if (weapon_->getType() == Weapons::type_::bullet)
     endwait = clock() + 0.3 * CLOCKS_PER_SEC;
+    else if (weapon_->getType() == Weapons::type_::rocket)
+      endwait = clock() + 0.7 * CLOCKS_PER_SEC;
+  }
+}
+
+void GameManager::generateEnemy()
+{
+  double r = rand() % 230 - 115;
+  if (clock() > endwait2) {
+    enemy_.reset(new Enemy());
+    this->addSubObject(enemy_);
+    enemies_.push_back(enemy_);
+    enemy_->init();
+    enemy_->getMatrix()[3].x = r;
+    endwait2 = clock() + 1 * CLOCKS_PER_SEC;
+  }
+}
+
+void GameManager::enemyShoots(std::shared_ptr<Enemy> e)
+{
+  if (clock() > e->endwait3) {
+    weapon_.reset(new Weapons());
+    this->addSubObject(weapon_);
+    weapon_->setOwner(Weapons::owner_::enemy);
+    bullets_.push_back(weapon_);
+    weapon_->getMatrix() = e->getMatrix();
+    e->endwait3 = clock() + 1 * CLOCKS_PER_SEC;
   }
 }
 
@@ -160,3 +213,5 @@ boolean GameManager::shipColl(glm::mat4 s, double r1, glm::mat4 e, double r2)
     return false;
 
 }
+
+

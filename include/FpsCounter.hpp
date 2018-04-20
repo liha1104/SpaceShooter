@@ -1,91 +1,65 @@
 #pragma once
 
-#include "Clock.hpp"
-
+#include <chrono>
 #include <iostream>
-#include <iomanip>
-
 
 /**
-  * Class that uses Clock to implement an FPS-counter
-  * @author <Andre.Brodtkorb@sintef.no>
-  * Copyright SINTEF
-  */
-
+* Class that uses std::chrono::high_resolution_clock
+* to implement an FPS-counter.
+*
+* Usage:
+*   Use fps() to get current fps.
+*
+* Warnings:
+*   USE fps() METHOD ONLY ONCE, IT IS CALLED IN main.cpp
+*   AND THEE SHALT NOT CALLETH IT ANYWH'RE ELSE!!!
+*
+* @author <Daniel Aaron Salwerowicz>
+* Copyright Kobol Dev 2018
+*/
 namespace siut {
 
-class FpsCounter {
-public:
-	FpsCounter() : frames_(0), elapsed_(0.0) {};
-	~FpsCounter() {};
+  using namespace std::chrono;
+  using Rolex = high_resolution_clock;
+  using TimePoint = time_point<Rolex>;
 
-	void start();
-	void stop();
-	void frame();
-	void restart();
-	void reset();
+  class FpsCounter {
+  public:
+    FpsCounter() {}
+    ~FpsCounter() {}
 
-	double elapsed();
-	unsigned long long frames();
-	double fps();
-	
-	std::ostream& print(std::ostream& os);
+    double fps();
 
-private:
-	Clock rolex_;
-	unsigned long long frames_; //< Number of frames_
-	double elapsed_; //< elapsed_ time between start and stop
-  FpsCounter(const FpsCounter& other){}
-//  FpsCounter& operator=(const FpsCounter& other){}
+  private:
+    double elapsed();
 
-};
+    TimePoint _last_point = Rolex::now();
+    TimePoint _current_point;
+    double _counter = 0, _last_fps = 60;
+  };
 
-inline void FpsCounter::start(){
-	rolex_.start();
-}
+  inline double FpsCounter::elapsed()
+  {
+    // Use duration cast to get number of milliseconds
+    // between current time point and last time point.
+    return duration_cast<milliseconds>(_current_point - _last_point).count();
+  }
 
-inline void FpsCounter::stop() {
-	elapsed_ = rolex_.stop();
-}
+  inline double FpsCounter::fps()
+  {
+    // Update current point and increment counter.
+    _current_point = Rolex::now();
+    ++_counter;
 
-inline void FpsCounter::frame() {
-	assert(rolex_.isRunning() && "Calling frame() on a stopped FpsCounter is mongo[tm].");
-	++frames_;
-}
+    // If elapsed milliseconds is larger than 1000
+    // one second has elapsed and we update fps.
+    if (elapsed() >= 1000.0) {
+      std::cout << "Current fps at update: " << _counter << std::endl;
+      _last_fps = _counter;
+      _counter = 0;
+      _last_point = _current_point;
+    }
 
-inline void FpsCounter::restart() {
-	reset();
-	start();
-}
-
-inline void FpsCounter::reset() {
-	rolex_.reset();
-	frames_ = 0;
-	elapsed_ = 0.0;
-}
-
-inline double FpsCounter::elapsed() {
-	return (rolex_.isRunning()) ? rolex_.elapsed() : elapsed_;
-}
-
-inline unsigned long long FpsCounter::frames() {
-	return frames_;
-}
-
-inline double FpsCounter::fps() {
-	return (double) frames() / elapsed();
-}
-
-inline std::ostream& FpsCounter::print(std::ostream& os) {
-	os << std::fixed << std::setprecision(2);
-	os << fps() << " fps.";
-	os << std::scientific;
-
-	return os;
-}
-
-inline std::ostream& operator<<(std::ostream & os, FpsCounter& f) {
-	return f.print(os);
-}
-
+    return _last_fps;
+  }
 } //end namespace siut

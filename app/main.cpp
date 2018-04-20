@@ -28,8 +28,6 @@ void init()
   glShadeModel(GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
 
-  counter.start();
-
   gm.reset(new GameManager());
   gm->init();
 
@@ -44,33 +42,15 @@ void display()
   gm->update(counter.fps());
   gm->render();
 
- /* if(keyPressed[KEY_ID_W]==true)      gm->getCam()->moveForward();
-  if(keyPressed[KEY_ID_A]==true)      gm->getCam()->moveLeft();
-  if(keyPressed[KEY_ID_D]==true)      gm->getCam()->moveRight();
-  if(keyPressed[KEY_ID_S]==true)      gm->getCam()->moveBackward();
-  if(keyPressed[KEY_ID_SPACE]==true)  gm->getCam()->moveUp();
-  if(keyPressed[KEY_ID_C]==true)      gm->getCam()->moveDown();*/
-
-
   if (keyPressed[KEY_ID_W] == true)      gm->getShip()->moveForward();
   if (keyPressed[KEY_ID_A] == true)      gm->getShip()->moveLeft();
   if (keyPressed[KEY_ID_D] == true)      gm->getShip()->moveRight();
   if (keyPressed[KEY_ID_S] == true)      gm->getShip()->moveBackward();
   if (keyPressed[KEY_ID_SPACE] == true)  gm->bulletFired();
-  if (keyPressed[KEY_ID_C] == true)      gm->getShip()->moveDown();
+  if (keyPressed[KEY_ID_C] == true)      gm->getShip()->moveDown(); 
+  if (keyPressed[KEY_ID_1] == true)      gm->setWeapon(Weapons::type_::bullet);
+  if (keyPressed[KEY_ID_2] == true)      gm->setWeapon(Weapons::type_::rocket);
 
-
-  /*
-  glColor3f(1.0f, 0.0f, 0.0f);
-  float size = 5.0f;
-  glBegin(GL_QUADS);
-  // Near Face
-glVertex3f(-size, -size, -50.0);
-glVertex3f(size, -size, -50.0);
-glVertex3f(size, size, -50.0);
-glVertex3f(-size, size, -50.0);
-  glEnd();*/
-  
 
   glutSwapBuffers();
   glutPostRedisplay();
@@ -108,6 +88,12 @@ void keyDown(unsigned char key, int x, int y)
     case 'c':
       keyPressed[KEY_ID_C] = true;
       break;
+    case '1':
+      keyPressed[KEY_ID_1] = true;
+      break;
+    case '2':
+      keyPressed[KEY_ID_2] = true;
+      break;
 
     default:
       glutPostRedisplay();
@@ -135,6 +121,12 @@ void keyUp(unsigned char key, int x, int y)
       break;
     case 'c':
       keyPressed[KEY_ID_C] = false;
+      break;
+    case '1':
+      keyPressed[KEY_ID_1] = false;
+      break;
+    case '2':
+      keyPressed[KEY_ID_2] = false;
       break;
 
   }

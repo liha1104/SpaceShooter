@@ -18,6 +18,16 @@ void SpaceShip::privateInit()
   matrix_ = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -80.0f));
 }
 
+void SpaceShip::reduceLife()
+{
+  life_ -= 1;
+}
+
+float SpaceShip::getLife()
+{
+  return life_;
+}
+
 void SpaceShip::texturize()
 {
   /* load an image file directly as a new OpenGL texture */
@@ -103,6 +113,7 @@ void SpaceShip::moveForward()
   if (matrix_[3].z > -200)
   matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, -1.0f));
 }
+
 void SpaceShip::moveBackward()
 {
   if (matrix_[3].z < -45)

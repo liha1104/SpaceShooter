@@ -17,6 +17,9 @@ class SpaceShip : public SceneObject
     void moveDown();
     void moveBackward();
     void moveForward();
+    void reduceLife();
+    float getLife();
+
 
   protected:
     void privateInit();
@@ -27,7 +30,7 @@ class SpaceShip : public SceneObject
 
 	private:
 	  float speed_;
-    float life_;
+    float life_ = 3;
     float armor_;
     
 };

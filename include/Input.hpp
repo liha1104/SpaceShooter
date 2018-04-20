@@ -6,5 +6,7 @@ const int KEY_ID_A        = 2;
 const int KEY_ID_D        = 3;
 const int KEY_ID_SPACE    = 4;
 const int KEY_ID_C        = 5;
+const int KEY_ID_1        = 6;
+const int KEY_ID_2        = 7;
 
 const int MOUSE_LEFT_BUTTON_DOWN = 20;
