@@ -1,11 +1,8 @@
 
+#include "include/Enemy.hpp"
+#include <iostream>
 #include <math.h>
 #include <random>
-#include <iostream>
-#include "../include/Enemy.hpp"
-#include "../glm/glm/glm.hpp"
-#include "../glm/glm/gtc/matrix_transform.hpp"
-
 
 Enemy::Enemy()
 {
@@ -15,15 +12,12 @@ Enemy::~Enemy()
 {
 }
 
-
-
 void Enemy::privateInit()
 {
   std::random_device gen;
   std::mt19937 eng(gen());
   std::uniform_int_distribution<int> dis(0, 2);
   int d = dis(eng);
-  std::cout << d << std::endl;
   if (d == 0)
     t = type_::shooterzz;
   else if (d == 1)
@@ -41,27 +35,24 @@ void Enemy::privateRender()
     glColor3f(1.0f, 0.0f, 1.0f);
   }
 
-   else if (t == type_::normal) {
+  else if (t == type_::normal) {
     //glLoadIdentity();
     glColor3f(1.0f, 1.0f, 0.0f);
   }
 
-   else {
+  else {
     //glLoadIdentity();
     glColor3f(1.0f, 1.0f, 1.0f);
   }
-   float size = 5.0f;
-   glBegin(GL_QUADS);
-   // Near Face
-   glVertex3f(-size, -size, size);
-   glVertex3f(size, -size, size);
-   glVertex3f(size, size, size);
-   glVertex3f(-size, size, size);
-   glEnd();
+  float size = 5.0f;
+  glBegin(GL_QUADS);
+  // Near Face
+  glVertex3f(-size, -size, size);
+  glVertex3f(size, -size, size);
+  glVertex3f(size, size, size);
+  glVertex3f(-size, size, size);
+  glEnd();
 }
-
-
-
 
 void Enemy::privateUpdate()
 {
@@ -85,7 +76,3 @@ Enemy::type_ Enemy::getType()
 {
   return t;
 }
-
-
-
-

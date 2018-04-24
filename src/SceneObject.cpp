@@ -1,9 +1,4 @@
-#include "../include/SceneObject.hpp"
-
-#include <windows.h>
-#include <GL/gl.h>
-#include "../glm/glm/glm.hpp"
-#include "../glm/glm/gtc/type_ptr.hpp"
+#include "include/SceneObject.hpp"
 
 // NB! Check matrix mult and scoped_ptr
 
@@ -20,12 +15,12 @@ SceneObject::~SceneObject()
 void SceneObject::render()
 {
   glPushMatrix();
-    //this->matrix_.multMatrix();
-    glMultMatrixf(glm::value_ptr(matrix_));
-    this->privateRender();
-    for(std::vector<std::shared_ptr<SceneObject> >::iterator it = children_.begin();
-        it != children_.end(); it++)
-        (*it)->render();
+  //this->matrix_.multMatrix();
+  glMultMatrixf(glm::value_ptr(matrix_));
+  this->privateRender();
+  for (std::vector<std::shared_ptr<SceneObject>>::iterator it = children_.begin();
+       it != children_.end(); it++)
+    (*it)->render();
   glPopMatrix();
 }
 
@@ -33,17 +28,17 @@ void SceneObject::update(double fps)
 {
   this->fps_ = fps;
   this->privateUpdate();
-  for(std::vector<std::shared_ptr<SceneObject> >::iterator it = children_.begin();
-      it != children_.end(); it++)
-      (*it)->update(fps);
+  for (std::vector<std::shared_ptr<SceneObject>>::iterator it = children_.begin();
+       it != children_.end(); it++)
+    (*it)->update(fps);
 }
 
 void SceneObject::init()
 {
   this->privateInit();
-  for(std::vector<std::shared_ptr<SceneObject> >::iterator it = children_.begin();
-      it != children_.end(); it++)
-      (*it)->init();
+  for (std::vector<std::shared_ptr<SceneObject>>::iterator it = children_.begin();
+       it != children_.end(); it++)
+    (*it)->init();
 }
 
 void SceneObject::addSubObject(std::shared_ptr<SceneObject> newchild)
@@ -53,13 +48,10 @@ void SceneObject::addSubObject(std::shared_ptr<SceneObject> newchild)
 
 void SceneObject::removeSubObject(const std::shared_ptr<SceneObject> child)
 {
-  for(std::vector<std::shared_ptr<SceneObject> >::iterator it = children_.begin();
-      it != children_.end(); it++)
-    if(*it == child)
-    {
+  for (std::vector<std::shared_ptr<SceneObject>>::iterator it = children_.begin();
+       it != children_.end(); it++)
+    if (*it == child) {
       children_.erase(it);
       break;
     }
 }
-
-

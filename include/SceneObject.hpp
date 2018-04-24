@@ -1,7 +1,20 @@
 #pragma once
+
+#include "SOIL/SOIL.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include "Shader.hpp"
+
+#include <algorithm>
+#include <iostream>
 #include <memory>
+#include <string>
 #include <vector>
-#include "../glm/glm/glm.hpp"
 
 // The SceneObject class is the parent of all objects in the scene graph.
 // To make an object to use in the scene graph, inherit this class and
@@ -31,9 +44,8 @@
 //
 // The storage of the children is handled by smart pointers, this is because
 
-class SceneObject
-{
- public:
+class SceneObject {
+  public:
   SceneObject();
   virtual ~SceneObject();
 
@@ -52,7 +64,7 @@ class SceneObject
   void setMatrix(const glm::mat4& m) { matrix_ = m; }
   glm::mat4& getMatrix() { return matrix_; }
 
- protected:
+  protected:
   // Override this method with your own render-implementation.
   virtual void privateRender() {}
   // Override this method with your own update-implementation.
@@ -68,7 +80,9 @@ class SceneObject
   // Relative to the object's parent. Defaults to the identity matrix.
   glm::mat4 matrix_;
 
- private:
+  std::string _texturepath = "/home/liha1104/Projects/spaceshooter/textures/";
+
+  private:
   // List of all SceneObjects that belong to the current object.
-  std::vector<std::shared_ptr<SceneObject> > children_;
+  std::vector<std::shared_ptr<SceneObject>> children_;
 };

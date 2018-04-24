@@ -1,8 +1,5 @@
+#include "include/Weapons.hpp"
 #include <math.h>
-#include "../include/Weapons.hpp"
-#include "../glm/glm/glm.hpp"
-#include "../glm/glm/gtc/matrix_transform.hpp"
-
 
 Weapons::Weapons()
 {
@@ -21,7 +18,6 @@ Weapons::type_ Weapons::getType()
 {
   return t;
 }
-
 
 void Weapons::privateInit()
 {
@@ -53,18 +49,16 @@ void Weapons::privateRender()
     glVertex3f(-size, size, size);
     glEnd();
   }
-
 }
 
 void Weapons::privateUpdate()
 {
   if (o == owner_::enemy)
     matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, 5.0f));
-  else
-    if(getType() == type_::bullet)
+  else if (getType() == type_::bullet)
     matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, -5.0f));
-    else if (getType() == type_::rocket)
-      matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, -2.0f));
+  else if (getType() == type_::rocket)
+    matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, -2.0f));
 }
 
 void Weapons::setOwner(owner_ ob)
@@ -76,4 +70,3 @@ void Weapons::setType(type_ ty)
 {
   t = ty;
 }
-

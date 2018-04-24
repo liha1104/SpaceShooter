@@ -1,6 +1,4 @@
-#include "../include/Camera.hpp"
-#include "../glm/glm/glm.hpp"
-#include "../glm/glm/gtc/matrix_transform.hpp"
+#include "include/Camera.hpp"
 
 #define PIOVER180 0.0174532925199
 
@@ -18,7 +16,6 @@ void Camera::privateInit()
 {
 }
 
-
 void Camera::privateRender()
 {
   // not drawing any camera geometry
@@ -26,7 +23,6 @@ void Camera::privateRender()
 
 void Camera::privateUpdate()
 {
-
 }
 
 void Camera::moveRight()
@@ -53,4 +49,3 @@ void Camera::moveBackward()
 {
   matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, -3.0f));
 }
-

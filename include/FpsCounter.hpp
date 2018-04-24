@@ -19,47 +19,47 @@
 */
 namespace siut {
 
-  using namespace std::chrono;
-  using Rolex = high_resolution_clock;
-  using TimePoint = time_point<Rolex>;
+using namespace std::chrono;
+using Rolex = high_resolution_clock;
+using TimePoint = time_point<Rolex>;
 
-  class FpsCounter {
+class FpsCounter {
   public:
-    FpsCounter() {}
-    ~FpsCounter() {}
+  FpsCounter() {}
+  ~FpsCounter() {}
 
-    double fps();
+  double fps();
 
   private:
-    double elapsed();
+  double elapsed();
 
-    TimePoint _last_point = Rolex::now();
-    TimePoint _current_point;
-    double _counter = 0, _last_fps = 60;
-  };
+  TimePoint _last_point = Rolex::now();
+  TimePoint _current_point;
+  double _counter = 0, _last_fps = 60;
+};
 
-  inline double FpsCounter::elapsed()
-  {
-    // Use duration cast to get number of milliseconds
-    // between current time point and last time point.
-    return duration_cast<milliseconds>(_current_point - _last_point).count();
+inline double FpsCounter::elapsed()
+{
+  // Use duration cast to get number of milliseconds
+  // between current time point and last time point.
+  return duration_cast<milliseconds>(_current_point - _last_point).count();
+}
+
+inline double FpsCounter::fps()
+{
+  // Update current point and increment counter.
+  _current_point = Rolex::now();
+  ++_counter;
+
+  // If elapsed milliseconds is larger than 1000
+  // one second has elapsed and we update fps.
+  if (elapsed() >= 1000.0) {
+    //std::cout << "Current fps at update: " << _counter << std::endl;
+    _last_fps = _counter;
+    _counter = 0;
+    _last_point = _current_point;
   }
 
-  inline double FpsCounter::fps()
-  {
-    // Update current point and increment counter.
-    _current_point = Rolex::now();
-    ++_counter;
-
-    // If elapsed milliseconds is larger than 1000
-    // one second has elapsed and we update fps.
-    if (elapsed() >= 1000.0) {
-      std::cout << "Current fps at update: " << _counter << std::endl;
-      _last_fps = _counter;
-      _counter = 0;
-      _last_point = _current_point;
-    }
-
-    return _last_fps;
-  }
+  return _last_fps;
+}
 } //end namespace siut

@@ -1,14 +1,7 @@
-
-#include <windows.h>
-#include <C:/Users/Victor/Documents/glew-2.1.0/glew-2.1.0/include/GL/glew.h>
-#include <GL/freeglut.h>  
-#include <stdlib.h>
-#include <stdio.h>
-#include <vector>
-#include "../include/Input.hpp"
-#include "../include/FpsCounter.hpp"
-#include "../include/GameManager.hpp"
-#include "../glm/glm/glm.hpp" //includes to glm in this folder not complete library
+#include "include/FpsCounter.hpp"
+#include "include/GameManager.hpp"
+#include "include/Input.hpp"
+#include <GL/freeglut.h>
 
 #include <iostream>
 
