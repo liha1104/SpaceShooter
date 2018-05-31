@@ -25,6 +25,7 @@ class Weapons : public SceneObject {
   void privateUpdate();
 
   private:
+  Shader redShader_;
   owner_ o;
   float speed_;
   type_ t;

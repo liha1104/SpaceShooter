@@ -36,6 +36,8 @@ if(BUILD_APPLICATION)
     include/SpaceShipModel.hpp
     include/OBJLoader.hpp
     include/Particles.hpp
+    include/Text.hpp
+    include/Vector3.hpp
     )
 
   set( SRCS
@@ -52,6 +54,7 @@ if(BUILD_APPLICATION)
     src/SpaceShipModel.cpp
     src/OBJLoader.cpp
     src/Particles.cpp
+    src/Text.cpp
 
     app/main.cpp
     )
@@ -71,7 +74,6 @@ if(BUILD_APPLICATION)
         shaders/part.vert)
 
     set( TEXT
-        textures/lava2.png
         textures/colorm.bmp
         textures/heightm.bmp )
 

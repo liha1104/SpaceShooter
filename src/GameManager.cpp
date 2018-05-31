@@ -20,8 +20,6 @@ void GameManager::privateInit()
 
   // Adding the camera to the scene
   cam_.reset(new Camera());
-  //  this->addSubObject(cam_);
-  //  matrix_.translate(0.0f, 0.0f, -99.0f);
 
   skybox_.reset(new Skybox());
   this->addSubObject(skybox_);
@@ -37,23 +35,15 @@ void GameManager::privateInit()
 
   bf_.reset(new BattleField());
   this->addSubObject(bf_);
-  //bf_->getMatrix()[3].x = bf_->getMatrix()[3].z - 155;
   bf_->getMatrix()[3].x = bf_->getMatrix()[3].z - 310;
 
   bf2_.reset(new BattleField());
   this->addSubObject(bf2_);
-  //bf_->getMatrix()[3].x = bf_->getMatrix()[3].z - 155;
   bf2_->getMatrix()[3].x = bf2_->getMatrix()[3].z - 310;
   bf2_->getMatrix()[3].z -= 5120;
 
   water_.reset(new Water());
   this->addSubObject(water_);
-
-  water2_.reset(new Water());
-  this->addSubObject(water2_);
-  water2_->getMatrix()[3].z = -1450;
-  //spaceshipm_.reset(new SpaceShip());
-  //this->addSubObject(spaceshipm_);
 
   spaceshipm_.reset(new SpaceShipModel());
   this->addSubObject(spaceshipm_);
@@ -73,10 +63,9 @@ void GameManager::privateUpdate()
   // Instead of adding all objects in the scene as subobject to the camera they are added as subobjects
   // to the game manager. Therefore, we set the game manager matrix equal to the camera matrix.
   this->matrix_ = cam_->getMatrix();
-  //skybox_->getMatrix() = cam_->getMatrix();
 
   eternalBF();
-  eternalWater();
+
 
   bool sd = false;
   bool c = false;
@@ -175,13 +164,9 @@ void GameManager::splosions(glm::mat4 pos){
         new_explosion->getMatrix()[3] = (pos[3]);
         if (particles_.size() > 2)
         {
-          //std::cout << (*explosions_.begin())->allFaded << std::endl;
-          //auto& objectToRemove = explosions_.at(explosions_.begin());
           this->removeSubObject(*particles_.begin());
-          //this->removeSubObject(*(explosions_.at(explosions_.begin())));
           particles_.erase(particles_.begin());
         }
-        std::cout << "Explosion size:" << particles_.size() << std::endl;
 }
 
 
@@ -229,13 +214,6 @@ void GameManager::eternalBF()
     bf2_->getMatrix()[3].z -= 5120 * 2;
 }
 
-void GameManager::eternalWater()
-{
-  if (water_->getMatrix()[3].z >= 1450)
-    water_->getMatrix()[3].z -= 1450 * 2;
-  if (water2_->getMatrix()[3].z >= 1450)
-    water2_->getMatrix()[3].z -= 1450 * 2;
-}
 
 void GameManager::generateEnemy()
 {

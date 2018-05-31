@@ -1,15 +1,25 @@
-uniform float water_data;
-varying vec4 texCoord;
+uniform samplerCube skybox;
+varying vec3 normalCoord;
+uniform float rand;
+varying mat4 modelView;
 
-void main()
+varying vec4 pos_eye;
+varying vec3 normal;
+uniform mat4 V;
+void main(void)
 {
-                vec4 pos = gl_Vertex;
-                texCoord = gl_MultiTexCoord0;
-                float xpos = pos.x * 12.0;
-                pos.x = xpos;
-                pos.z = pos.z * 50.0;
-                pos.y = -35.0 + (sin(gl_MultiTexCoord0.x * 20.0 * water_data));
-                texCoord.x = texCoord.x + (water_data * 0.05);
+    vec4 pos = gl_Vertex;
 
-                gl_Position = gl_ModelViewProjectionMatrix * pos;
+    modelView = gl_ModelViewMatrix;
+
+    pos_eye = gl_ModelViewMatrix * gl_Vertex;
+
+
+//    pos.y = sin(( pos.z + randomBullshit)/(float(64))) + cos(pos.x/(float(64))) * float(5) - float(5);
+    pos.y = sin(( pos.z + rand)/(float(200))) + cos(pos.x/(float(200))) - float(35);
+
+    gl_Position = gl_ModelViewProjectionMatrix * pos;
+
+    normalCoord = gl_NormalMatrix * gl_Normal;
+    normal = normalCoord;
 }

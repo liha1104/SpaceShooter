@@ -15,24 +15,24 @@ void BattleField::privateInit()
   mShader_.loadShaders("shaders/map.vert", "shaders/map.frag");
 
   /* load an image file directly as a new OpenGL texture */
-  tex_cm = SOIL_load_OGL_texture(
+  tex_cm_ = SOIL_load_OGL_texture(
       (_texturepath + "colorm.bmp").c_str(),
       SOIL_LOAD_AUTO,
       SOIL_CREATE_NEW_ID,
       SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
 
-  if (0 == tex_cm) {
+  if (0 == tex_cm_) {
     printf("SOIL loading error: '%s'\n", SOIL_last_result());
   }
 
   /* load an image file directly as a new OpenGL texture */
-  tex_hm = SOIL_load_OGL_texture(
+  tex_hm_ = SOIL_load_OGL_texture(
       (_texturepath + "heightm.bmp").c_str(),
       SOIL_LOAD_AUTO,
       SOIL_CREATE_NEW_ID,
       SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
 
-  if (0 == tex_hm) {
+  if (0 == tex_hm_) {
     printf("SOIL loading error: '%s'\n", SOIL_last_result());
   }
 
@@ -92,10 +92,10 @@ void BattleField::privateRender()
   mShader_.enableProgram();
   //glColor3d(1.0, 1.0, 1.0);
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, tex_hm);
+  glBindTexture(GL_TEXTURE_2D, tex_hm_);
   glEnable(GL_TEXTURE_2D);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, tex_cm);
+  glBindTexture(GL_TEXTURE_2D, tex_cm_);
   glEnable(GL_TEXTURE_2D);
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

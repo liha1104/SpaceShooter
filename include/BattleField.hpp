@@ -18,8 +18,8 @@ class BattleField : public SceneObject {
   std::vector<glm::vec3> vertexArray_; // Maybe two-dim vector and several arrays
   std::vector<glm::uint> indexArray_;
   std::vector<glm::vec2> texArray_;
-  GLuint tex_hm;
-  GLuint tex_cm;
+  GLuint tex_hm_;
+  GLuint tex_cm_;
   Shader mShader_;
 
   // normal array.

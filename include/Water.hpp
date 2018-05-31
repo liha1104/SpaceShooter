@@ -1,32 +1,24 @@
- #pragma once
-
-
 #include "SceneObject.hpp"
 
-
+//Pure waah, fefty pence, teystes like fak all
 class Water : public SceneObject
 {
-  public:
-    Water();
-    ~Water();
+public:
+  Water();
+  ~Water();
 
-  protected:
-    void privateInit();
-    void privateRender();
-    void privateUpdate();
-    bool markedForDeletion();
+protected:
+  virtual void privateInit();
+  virtual void privateRender();
+  virtual void privateUpdate();
 
-  private:
-    std::vector< glm::vec3 > vertexArray_; // Maybe two-dim vector and several arrays
-    std::vector< glm::uint > indicesArray_;
-    std::vector< glm::vec2 > _texCoordArray;
-    std::vector< GLint > _waterData;
-    // normal array.
-    // texture coord array
-    GLuint _texture;
-    GLint _texColormapSampler;
-    GLint _waterDataSampler;
+private:
+  std::vector< glm::vec3 > vertexArray_; // Maybe two-dim vector and several arrays
+  std::vector< glm::uint > indiceArray_;
+  std::vector< glm::vec2 > texArray_;
 
-    Shader waterShader;
-    float amount = 0;
+  GLuint texture_;
+  Shader wShader_;
+
+  float waterVar = 0;
 };

@@ -90,7 +90,7 @@ void Enemy::privateRender()
 
   else {
     //glLoadIdentity();
-    float diffMat[] = { 0.0f, 0.0f, 8.0f };
+    float diffMat[] = { 0.3f, 0.0f, 0.8f };
     glMaterialfv(GL_FRONT, GL_DIFFUSE, diffMat);
 
     float specMat[] = { 1.0f, 1.0f, 1.0f };

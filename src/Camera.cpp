@@ -4,8 +4,7 @@
 
 Camera::Camera()
 {
-  matrix_ = glm::translate(glm::mat4(), glm::vec3(0.0f, -35.0f, -40.0f));
-  //matrix_ = glm::rotate(matrix_, (glm::mediump_float)0.5, glm::vec3(1.0f, 0.0f, 0.0f));
+  //matrix_ = glm::translate(glm::mat4(), glm::vec3(0.0f, -35.0f, -40.0f));
 }
 
 Camera::~Camera()

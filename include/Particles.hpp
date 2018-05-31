@@ -34,7 +34,7 @@ private:
   Shader    particleEffect;
   glm::vec4 colorsToShader;
   GLint fadeEffect;
-  static constexpr int MAX_PARTICLES {1000};
+  static constexpr int MAX_PARTICLES {800};
 
 
   const GLfloat colors[12][3]=		// Rainbow Of Colors

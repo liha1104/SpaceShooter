@@ -23,7 +23,6 @@ class GameManager : public SceneObject {
   void setWeapon(Weapons::type_);
   void bulletFired();
   void eternalBF();
-  void eternalWater();
   void generateEnemy();
   void enemyShoots(std::shared_ptr<Enemy>);
   bool bullColl(glm::mat4, double, glm::mat4, double);
@@ -51,7 +50,7 @@ class GameManager : public SceneObject {
   std::shared_ptr<Weapons> weaponL_;
   std::shared_ptr<Skybox> skybox_;
   std::shared_ptr<Water> water_;
-  std::shared_ptr<Water> water2_;
+
   Weapons::type_ shipWeapon_ = Weapons::type_::bullet;
 
   std::chrono::_V2::system_clock::time_point endwait = std::chrono::system_clock::now();

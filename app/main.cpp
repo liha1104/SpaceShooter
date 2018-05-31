@@ -2,6 +2,8 @@
 #include "include/GameManager.hpp"
 #include "include/Input.hpp"
 #include <GL/freeglut.h>
+#include "include/Text.hpp"
+#include <sstream>
 
 #include <iostream>
 
@@ -13,6 +15,8 @@ int window;
 bool keyPressed[30];
 int mousePosX, mousePosY; 
 float moveX, moveY;
+Text _text;
+float ymove = 0;
 
 void init()
 {
@@ -26,6 +30,55 @@ void init()
 
   for(int i=0; i<30; i++)
     keyPressed[i]=false;
+}
+
+void printText() {
+  //glDisable(GL_LIGHTING);
+  // Draw the text
+  char buffer[800];
+  glColor3f(1.0, 1.0, 1.0);
+  glPushMatrix();
+  glLoadIdentity();
+  float xPosition = 0.0f;
+  float xPositionControl = 0.0f;
+  float yPosition = -60.0f + ymove;
+  float lineShift = 0.0f;
+  float zPosition = -50.0f;
+  // Write text:
+
+  std::stringstream ss;
+  ss << "W: Forward, A: Left, S: Backward, D: Right";
+  strcpy(buffer, ss.str().c_str());
+  _text.setPos(xPositionControl, yPosition, zPosition);
+  _text.printString(buffer, Text::FONT_NORMAL);
+
+//  ss=std::stringstream();
+//  ss << "E: Shoot, P: Pause, 1: Primary, 2: Secondary";
+//  strcpy(buffer, ss.str().c_str());
+//  _text.setPos(xPositionControl, yPosition-1*lineShift, zPosition);
+//  _text.printString(buffer, Text::FONT_NORMAL);
+
+//  ss=std::stringstream();
+//  ss << "SpaceShip X: " << gm->getShipM()->getMatrix()[3].x;
+//  strcpy(buffer, ss.str().c_str());
+//  _text.setPos(xPosition, yPosition-3*lineShift, zPosition);
+//  _text.printString(buffer, Text::FONT_NORMAL);
+
+//  ss=std::stringstream();
+//  ss << "SpaceShip Z: " << gm->getShipM()->getMatrix()[3].z;
+//  strcpy(buffer, ss.str().c_str());
+//  _text.setPos(xPosition, yPosition-4*lineShift, zPosition);
+//  _text.printString(buffer, Text::FONT_NORMAL);
+
+//  ss=std::stringstream();
+//  ss << "SpaceShip HP: " << gm->getShipM()->getLife();
+//  strcpy(buffer, ss.str().c_str());
+//  _text.setPos(xPosition, yPosition-5*lineShift, zPosition);
+//  _text.printString(buffer, Text::FONT_NORMAL);
+
+  glPopMatrix();
+  ymove += 0.03f;
+  //glEnable(GL_LIGHTING);
 }
 
 void display()
@@ -44,11 +97,13 @@ void display()
   if (keyPressed[KEY_ID_1] == true)      gm->setWeapon(Weapons::type_::bullet);
   if (keyPressed[KEY_ID_2] == true)      gm->setWeapon(Weapons::type_::rocket);
 
+  printText();
 
   glutSwapBuffers();
   glutPostRedisplay();
 
 }
+
 
 void keyDown(unsigned char key, int x, int y)
 {

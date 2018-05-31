@@ -38,9 +38,10 @@ void Weapons::privateRender()
     glEnd();
   }
   else if (getType() == type_::rocket && getOwner() == owner_::ship) {
-    //glLoadIdentity();
+
+//    //glLoadIdentity();
     glColor3f(1.0f, 0.8f, 0.0f);
-    float size = 2.0f;
+    float size = 2.5f;
     glBegin(GL_QUADS);
     // Near Face
     glVertex3f(-size, -size, size);
