@@ -31,6 +31,11 @@ if(BUILD_APPLICATION)
     include/SpaceShip.hpp
     include/Weapons.hpp
     include/Shader.hpp
+    include/Skybox.hpp
+    include/Water.hpp
+    include/SpaceShipModel.hpp
+    include/OBJLoader.hpp
+    include/Particles.hpp
     )
 
   set( SRCS
@@ -42,6 +47,11 @@ if(BUILD_APPLICATION)
     src/Weapons.cpp
     src/SpaceShip.cpp
     src/Shader.cpp
+    src/Skybox.cpp
+    src/Water.cpp
+    src/SpaceShipModel.cpp
+    src/OBJLoader.cpp
+    src/Particles.cpp
 
     app/main.cpp
     )
@@ -50,18 +60,36 @@ if(BUILD_APPLICATION)
         shaders/red.vert
         shaders/red.frag
         shaders/map.frag
-        shaders/map.vert)
+        shaders/map.vert
+        shaders/skybox.vert
+        shaders/skybox.frag
+        shaders/water.frag
+        shaders/water.vert
+        shaders/ship.frag
+        shaders/ship.vert
+        shaders/part.frag
+        shaders/part.vert)
 
     set( TEXT
         textures/lava2.png
         textures/colorm.bmp
         textures/heightm.bmp )
 
+    set( SBOX
+        skybox/up.jpg
+        skybox/down.jpg
+        skybox/left.jpg
+        skybox/right.jpg
+        skybox/back.jpg
+        skybox/front.jpg
+        )
+
   add_executable(${PROJECT_NAME}
     ${HDRS}
     ${SRCS}
     ${SHAD}
-    ${TEXT} )
+    ${TEXT}
+    ${SBOX})
 
   #############################################################################
   # TURN ON C++17 FEATURES
@@ -86,6 +114,6 @@ if(BUILD_APPLICATION)
 
   #############################################################################
   # Qt dependencies
-  target_link_libraries(${PROJECT_NAME} Qt5::Core GLEW GL GLU glut SOIL)
+  target_link_libraries(${PROJECT_NAME} Qt5::Core GLEW GL GLU glut SOIL assimp)
 
 endif() # end BUILD_APPLICATION

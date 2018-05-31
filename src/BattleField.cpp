@@ -36,13 +36,21 @@ void BattleField::privateInit()
     printf("SOIL loading error: '%s'\n", SOIL_last_result());
   }
 
+
   mShader_.enableProgram();
-  GLint texSampler0;
-  GLint texSampler1;
-  texSampler0 = glGetUniformLocation(tex_cm, "color");
-  glUniform1i(texSampler0, 0);
-  texSampler1 = glGetUniformLocation(tex_hm, "height");
-  glUniform1i(texSampler1, 1);
+
+    GLuint _shader_height_map = glGetUniformLocation(mShader_.getProgram(), "height");
+    GLuint _shader_colour_map = glGetUniformLocation(mShader_.getProgram(), "color");
+    glUniform1i(_shader_height_map, 0);
+    glUniform1i(_shader_colour_map, 1);
+
+//  mShader_.enableProgram();
+//  GLint texSampler0;
+//  GLint texSampler1;
+//  texSampler0 = glGetUniformLocation(tex_hm, "height");
+//  glUniform1i(texSampler0, 0);
+//  texSampler1 = glGetUniformLocation(tex_cm, "color");
+//  glUniform1i(texSampler1, 1);
   mShader_.disableProgram();
 
   // Create vertex arrays
@@ -68,13 +76,26 @@ void BattleField::privateInit()
 
 void BattleField::privateRender()
 {
+
+//        GLuint color = glGetUniformLocation(map.getProg(), "color");
+//        GLuint height = glGetUniformLocation(map.getProg(), "height");
+//        map.enable();
+//        glUniform1i(color, 0);
+//        glUniform1i(height, 1);
+//        glActiveTexture(GL_TEXTURE0 + 0);
+//        glBindTexture(GL_TEXTURE_2D, colorMap);
+//        glActiveTexture(GL_TEXTURE0 + 1);
+//        glBindTexture(GL_TEXTURE_2D, heightMap);
+
+
   // activate and specify pointer to vertex array
-  glColor3d(1.0, 1.0, 1.0);
+  mShader_.enableProgram();
+  //glColor3d(1.0, 1.0, 1.0);
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, tex_hm);
   glEnable(GL_TEXTURE_2D);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, tex_cm);
   glEnable(GL_TEXTURE_2D);
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -96,11 +117,12 @@ void BattleField::privateRender()
   glDisable(GL_TEXTURE_2D);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
+  mShader_.disableProgram();
 }
 
 void BattleField::privateUpdate()
 {
-  matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, 3.0f));
+  matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, 10.0f));
 }
 
 void BattleField::loadTex(GLuint t)

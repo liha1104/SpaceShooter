@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SceneObject.hpp"
-#include <time.h>
+#include <chrono>
 
 class Enemy : public SceneObject {
   public:
@@ -11,12 +11,14 @@ class Enemy : public SceneObject {
     normal,
     zigzag };
   type_ getType();
-  clock_t endwait3 = clock();
+  std::chrono::system_clock::time_point getTime();
+  void setTime(std::chrono::_V2::system_clock::time_point);
 
   protected:
   void privateInit();
   void privateRender();
   void privateUpdate();
+
 
   private:
   type_ t;
@@ -24,4 +26,10 @@ class Enemy : public SceneObject {
   float speed_;
   float life_;
   float armor_;
+  std::vector<glm::vec3> _VERT;
+  std::vector<glm::vec3> _NORM;
+  std::vector<glm::vec2> _TEXC;
+  std::vector<glm::uint> _INDI;
+  Shader shader_;
+  std::chrono::_V2::system_clock::time_point endwait3 = std::chrono::system_clock::now();
 };

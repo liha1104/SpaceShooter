@@ -22,7 +22,6 @@ class BattleField : public SceneObject {
   GLuint tex_cm;
   Shader mShader_;
 
-  glm::uint _RESET = 1000000000;
   // normal array.
   // texture coord array
 };

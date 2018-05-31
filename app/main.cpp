@@ -35,12 +35,12 @@ void display()
   gm->update(counter.fps());
   gm->render();
 
-  if (keyPressed[KEY_ID_W] == true)      gm->getShip()->moveForward();
-  if (keyPressed[KEY_ID_A] == true)      gm->getShip()->moveLeft();
-  if (keyPressed[KEY_ID_D] == true)      gm->getShip()->moveRight();
-  if (keyPressed[KEY_ID_S] == true)      gm->getShip()->moveBackward();
+  if (keyPressed[KEY_ID_W] == true)      gm->getShipM()->moveForward();
+  if (keyPressed[KEY_ID_A] == true)      gm->getShipM()->moveLeft();
+  if (keyPressed[KEY_ID_D] == true)      gm->getShipM()->moveRight();
+  if (keyPressed[KEY_ID_S] == true)      gm->getShipM()->moveBackward();
   if (keyPressed[KEY_ID_SPACE] == true)  gm->bulletFired();
-  if (keyPressed[KEY_ID_C] == true)      gm->getShip()->moveDown(); 
+  if (keyPressed[KEY_ID_C] == true)      gm->getShipM()->moveDown();
   if (keyPressed[KEY_ID_1] == true)      gm->setWeapon(Weapons::type_::bullet);
   if (keyPressed[KEY_ID_2] == true)      gm->setWeapon(Weapons::type_::rocket);
 
@@ -157,7 +157,7 @@ void reshape(int w, int h)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 //  glOrtho(-50, 700, -50, 700, -50, 50);
-  gluPerspective(60.0f, float(w)/float(h) ,0.1f, 1000.0f);
+  gluPerspective(60.0f, float(w)/float(h) , 0.1f, 1300.0f);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();

@@ -15,7 +15,7 @@ void GameManager::privateInit()
   glEnable(GL_CULL_FACE);
 
   //Light position
-  float lightPos[] = {1.0f, 1.0f, 1.0f, 0.0f};
+  float lightPos[] = { 1.0f, 1.0f, 1.0f, 0.0f };
   glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 
   // Adding the camera to the scene
@@ -23,13 +23,40 @@ void GameManager::privateInit()
   //  this->addSubObject(cam_);
   //  matrix_.translate(0.0f, 0.0f, -99.0f);
 
+  skybox_.reset(new Skybox());
+  this->addSubObject(skybox_);
+
+  auto skyboxMat = skybox_->getMatrix();
+  auto camMat = cam_->getMatrix();
+
+  auto transVec4 = camMat[3] - skyboxMat[3];
+
+  auto transVec3 = glm::vec3(-transVec4.x, -transVec4.y, -transVec4.z);
+
+  skybox_->setMatrix(glm::translate(skyboxMat, transVec3));
+
   bf_.reset(new BattleField());
   this->addSubObject(bf_);
   //bf_->getMatrix()[3].x = bf_->getMatrix()[3].z - 155;
   bf_->getMatrix()[3].x = bf_->getMatrix()[3].z - 310;
 
-  spaceship_.reset(new SpaceShip());
-  this->addSubObject(spaceship_);
+  bf2_.reset(new BattleField());
+  this->addSubObject(bf2_);
+  //bf_->getMatrix()[3].x = bf_->getMatrix()[3].z - 155;
+  bf2_->getMatrix()[3].x = bf2_->getMatrix()[3].z - 310;
+  bf2_->getMatrix()[3].z -= 5120;
+
+  water_.reset(new Water());
+  this->addSubObject(water_);
+
+  water2_.reset(new Water());
+  this->addSubObject(water2_);
+  water2_->getMatrix()[3].z = -1450;
+  //spaceshipm_.reset(new SpaceShip());
+  //this->addSubObject(spaceshipm_);
+
+  spaceshipm_.reset(new SpaceShipModel());
+  this->addSubObject(spaceshipm_);
 }
 
 void GameManager::privateRender()
@@ -46,6 +73,10 @@ void GameManager::privateUpdate()
   // Instead of adding all objects in the scene as subobject to the camera they are added as subobjects
   // to the game manager. Therefore, we set the game manager matrix equal to the camera matrix.
   this->matrix_ = cam_->getMatrix();
+  //skybox_->getMatrix() = cam_->getMatrix();
+
+  eternalBF();
+  eternalWater();
 
   bool sd = false;
   bool c = false;
@@ -54,17 +85,17 @@ void GameManager::privateUpdate()
     if ((*en)->getType() == Enemy::type_::shooterzz)
       enemyShoots(*en);
 
-
     for (auto it = bullets_.begin(); it != bullets_.end();) {
 
-      if (bullColl((*it)->getMatrix(), 3, spaceship_->getMatrix(), 6) && (*it)->getOwner() == Weapons::owner_::enemy) {
+      if (bullColl((*it)->getMatrix(), 3, spaceshipm_->getMatrix(), 15) && (*it)->getOwner() == Weapons::owner_::enemy) {
         sd = true;
+        splosions((*it)->getMatrix());
         this->removeSubObject(*it);
         it = bullets_.erase(it);
-        invulnerability(spaceship_);
+        invulnerability(spaceshipm_);
       }
-      if ((*it)->getMatrix()[3].z >= -1100 && !bullColl((*it)->getMatrix(), 3, (*en)->getMatrix(), 6)
-          || (bullColl((*it)->getMatrix(), 3, (*en)->getMatrix(), 6) && (*it)->getOwner() == Weapons::owner_::enemy)) {
+      else if (((*it)->getMatrix()[3].z >= -1100 && !bullColl((*it)->getMatrix(), 3, (*en)->getMatrix(), 6))
+          || (bullColl((*it)->getMatrix(), 3, (*en)->getMatrix(), 10) && (*it)->getOwner() == Weapons::owner_::enemy)) {
         it++;
         continue;
       }
@@ -73,7 +104,8 @@ void GameManager::privateUpdate()
         bullets_.erase(it);
         break;
       }
-      else if (bullColl((*it)->getMatrix(), 3, (*en)->getMatrix(), 6) && (*it)->getOwner() == Weapons::owner_::ship) {
+      else if (bullColl((*it)->getMatrix(), 5, (*en)->getMatrix(), 15) && (*it)->getOwner() == Weapons::owner_::ship) {
+        splosions((*it)->getMatrix());
         this->removeSubObject(*it);
         it = bullets_.erase(it);
         c = true;
@@ -81,21 +113,24 @@ void GameManager::privateUpdate()
       }
     }
 
-    if (sd && (*spaceship_).getLife() == 0) {
-      this->removeSubObject(spaceship_);
+    if (sd && (*spaceshipm_).getLife() == 0) {
+      splosions(spaceshipm_->getMatrix());
+      this->removeSubObject(spaceshipm_);
     }
 
-    if (!c && !shipColl(spaceship_->getMatrix(), 5, (*en)->getMatrix(), 6)) {
+    if (!c && !shipColl(spaceshipm_->getMatrix(), 5, (*en)->getMatrix(), 6)) {
       en++;
       continue;
     }
     else if (c) {
+      splosions((*en)->getMatrix());
       this->removeSubObject(*en);
       enemies_.erase(en);
       break;
     }
-    else if (shipColl(spaceship_->getMatrix(), 5, (*en)->getMatrix(), 6)) {
-      this->removeSubObject(spaceship_);
+    else if (shipColl(spaceshipm_->getMatrix(), 5, (*en)->getMatrix(), 6)) {
+      splosions(spaceshipm_->getMatrix());
+      this->removeSubObject(spaceshipm_);
       this->removeSubObject(*en);
       enemies_.erase(en);
       break;
@@ -114,57 +149,119 @@ std::shared_ptr<SpaceShip> GameManager::getShip()
   return spaceship_;
 }
 
+std::shared_ptr<SpaceShipModel> GameManager::getShipM()
+{
+  return spaceshipm_;
+}
+
 void GameManager::setWeapon(Weapons::type_ sw)
 {
   shipWeapon_ = sw;
 }
 
-void GameManager::invulnerability(std::shared_ptr<SpaceShip> s)
+void GameManager::invulnerability(std::shared_ptr<SpaceShipModel> s)
 {
-  if (clock() > endwait4) {
+  if (std::chrono::system_clock::now() > endwait4) {
     s->reduceLife();
-    endwait4 = clock() + 0.075 * CLOCKS_PER_SEC;
+    endwait4 = std::chrono::system_clock::now() + std::chrono::milliseconds(1000);
   }
 }
 
+void GameManager::splosions(glm::mat4 pos){
+  std::shared_ptr<Particles> new_explosion;
+        new_explosion.reset(new Particles(pos));
+        particles_.push_back(new_explosion);
+        this->addSubObject(new_explosion);
+        new_explosion->getMatrix()[3] = (pos[3]);
+        if (particles_.size() > 2)
+        {
+          //std::cout << (*explosions_.begin())->allFaded << std::endl;
+          //auto& objectToRemove = explosions_.at(explosions_.begin());
+          this->removeSubObject(*particles_.begin());
+          //this->removeSubObject(*(explosions_.at(explosions_.begin())));
+          particles_.erase(particles_.begin());
+        }
+        std::cout << "Explosion size:" << particles_.size() << std::endl;
+}
+
+
 void GameManager::bulletFired()
 {
-  if (clock() > endwait) {
-    weapon_.reset(new Weapons());
-    this->addSubObject(weapon_);
-    weapon_->setOwner(Weapons::owner_::ship);
-    weapon_->setType(shipWeapon_);
-    bullets_.push_back(weapon_);
-    weapon_->getMatrix() = spaceship_->getMatrix();
-    if (weapon_->getType() == Weapons::type_::bullet)
-      endwait = clock() + 0.005 * CLOCKS_PER_SEC;
-    else if (weapon_->getType() == Weapons::type_::rocket)
-      endwait = clock() + 0.025 * CLOCKS_PER_SEC;
+  if (std::chrono::system_clock::now() > endwait) {
+    if (shipWeapon_ == Weapons::type_::bullet) {
+      weapon_.reset(new Weapons());
+      this->addSubObject(weapon_);
+      weapon_->setOwner(Weapons::owner_::ship);
+      weapon_->setType(shipWeapon_);
+      bullets_.push_back(weapon_);
+      weapon_->getMatrix()[3].x = spaceshipm_->getMatrix()[3].x;
+      weapon_->getMatrix()[3].y = spaceshipm_->getMatrix()[3].y;
+      weapon_->getMatrix()[3].z = spaceshipm_->getMatrix()[3].z;
+      endwait = std::chrono::system_clock::now() + std::chrono::milliseconds(150);
+    }
+    else if (shipWeapon_ == Weapons::type_::rocket) {
+      weaponR_.reset(new Weapons());
+      this->addSubObject(weaponR_);
+      weaponR_->setOwner(Weapons::owner_::ship);
+      weaponR_->setType(shipWeapon_);
+      bullets_.push_back(weaponR_);
+      weaponL_.reset(new Weapons());
+      this->addSubObject(weaponL_);
+      weaponL_->setOwner(Weapons::owner_::ship);
+      weaponL_->setType(shipWeapon_);
+      bullets_.push_back(weaponL_);
+      weaponR_->getMatrix()[3].x = spaceshipm_->getMatrix()[3].x + 15;
+      weaponR_->getMatrix()[3].y = spaceshipm_->getMatrix()[3].y;
+      weaponR_->getMatrix()[3].z = spaceshipm_->getMatrix()[3].z;
+      weaponL_->getMatrix()[3].x = spaceshipm_->getMatrix()[3].x - 15;
+      weaponL_->getMatrix()[3].y = spaceshipm_->getMatrix()[3].y;
+      weaponL_->getMatrix()[3].z = spaceshipm_->getMatrix()[3].z;
+      endwait = std::chrono::system_clock::now() + std::chrono::milliseconds(500);
+    }
   }
+}
+
+void GameManager::eternalBF()
+{
+  if (bf_->getMatrix()[3].z >= 5120)
+    bf_->getMatrix()[3].z -= 5120 * 2;
+  if (bf2_->getMatrix()[3].z >= 5120)
+    bf2_->getMatrix()[3].z -= 5120 * 2;
+}
+
+void GameManager::eternalWater()
+{
+  if (water_->getMatrix()[3].z >= 1450)
+    water_->getMatrix()[3].z -= 1450 * 2;
+  if (water2_->getMatrix()[3].z >= 1450)
+    water2_->getMatrix()[3].z -= 1450 * 2;
 }
 
 void GameManager::generateEnemy()
 {
   double r = rand() % 230 - 115;
-  if (clock() > endwait2) {
+  if (std::chrono::system_clock::now() > endwait2) {
     enemy_.reset(new Enemy());
     this->addSubObject(enemy_);
     enemies_.push_back(enemy_);
     enemy_->init();
     enemy_->getMatrix()[3].x = r;
-    endwait2 = clock() + 0.075 * CLOCKS_PER_SEC;
+    endwait2 = std::chrono::system_clock::now() + std::chrono::milliseconds(2200);
   }
 }
 
 void GameManager::enemyShoots(std::shared_ptr<Enemy> e)
 {
-  if (clock() > e->endwait3) {
+  if (std::chrono::system_clock::now() > e->getTime()) {
     weapon_.reset(new Weapons());
     this->addSubObject(weapon_);
     weapon_->setOwner(Weapons::owner_::enemy);
     bullets_.push_back(weapon_);
-    weapon_->getMatrix() = e->getMatrix();
-    e->endwait3 = clock() + 0.03 * CLOCKS_PER_SEC;
+    weapon_->getMatrix()[3].x = e->getMatrix()[3].x;
+    weapon_->getMatrix()[3].y = e->getMatrix()[3].y;
+    weapon_->getMatrix()[3].z = e->getMatrix()[3].z;
+    //weapon_->getMatrix() = e->getMatrix();
+    e->setTime(std::chrono::system_clock::now() + std::chrono::milliseconds(700));
   }
 }
 

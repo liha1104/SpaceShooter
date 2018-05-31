@@ -10,6 +10,7 @@
 #include <GL/glu.h>
 #include "Shader.hpp"
 
+
 #include <algorithm>
 #include <iostream>
 #include <memory>
@@ -81,6 +82,7 @@ class SceneObject {
   glm::mat4 matrix_;
 
   std::string _texturepath = "/home/liha1104/Projects/spaceshooter/textures/";
+  std::string _sboxpath = "/home/liha1104/Projects/spaceshooter/skybox/";
 
   private:
   // List of all SceneObjects that belong to the current object.
