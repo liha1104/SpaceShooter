@@ -11,12 +11,12 @@ Weapons::~Weapons()
 
 Weapons::owner_ Weapons::getOwner()
 {
-  return o;
+  return o_;
 }
 
 Weapons::type_ Weapons::getType()
 {
-  return t;
+  return t_;
 }
 
 void Weapons::privateInit()
@@ -26,7 +26,6 @@ void Weapons::privateInit()
 void Weapons::privateRender()
 {
   if (getType() == type_::bullet && getOwner() == owner_::ship) {
-    //glLoadIdentity();
     glColor3f(1.0f, 1.0f, 0.0f);
     float size = 1.0f;
     glBegin(GL_QUADS);
@@ -39,7 +38,6 @@ void Weapons::privateRender()
   }
   else if (getType() == type_::rocket && getOwner() == owner_::ship) {
 
-//    //glLoadIdentity();
     glColor3f(1.0f, 0.8f, 0.0f);
     float size = 2.5f;
     glBegin(GL_QUADS);
@@ -52,8 +50,7 @@ void Weapons::privateRender()
   }
 
   if (getOwner() == owner_::enemy) {
-    //glLoadIdentity();
-    glColor3f(1.0f, 0.3f, 1.0f);
+    glColor3f(0.0f, 0.8f, 0.8f);
     float size = 2.0f;
     glBegin(GL_QUADS);
     // Near Face
@@ -63,13 +60,11 @@ void Weapons::privateRender()
     glVertex3f(-size, size, size);
     glEnd();
   }
-
-
 }
 
 void Weapons::privateUpdate()
 {
-  if (o == owner_::enemy)
+  if (o_ == owner_::enemy)
     matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, 12.0f));
   else if (getType() == type_::bullet)
     matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, -17.0f));
@@ -79,10 +74,10 @@ void Weapons::privateUpdate()
 
 void Weapons::setOwner(owner_ ob)
 {
-  o = ob;
+  o_ = ob;
 }
 
 void Weapons::setType(type_ ty)
 {
-  t = ty;
+  t_ = ty;
 }

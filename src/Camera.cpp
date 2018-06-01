@@ -4,7 +4,7 @@
 
 Camera::Camera()
 {
-  //matrix_ = glm::translate(glm::mat4(), glm::vec3(0.0f, -35.0f, -40.0f));
+  matrix_ = glm::translate(glm::mat4(), glm::vec3(0.0f, -35.0f, -40.0f));
 }
 
 Camera::~Camera()

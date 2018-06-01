@@ -26,7 +26,7 @@ class Weapons : public SceneObject {
 
   private:
   Shader redShader_;
-  owner_ o;
+  owner_ o_;
   float speed_;
-  type_ t;
+  type_ t_;
 };

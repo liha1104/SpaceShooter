@@ -19,17 +19,16 @@ class Enemy : public SceneObject {
   void privateRender();
   void privateUpdate();
 
-
   private:
   type_ t;
   bool dukdw = 1;
   float speed_;
   float life_;
   float armor_;
-  std::vector<glm::vec3> _VERT;
-  std::vector<glm::vec3> _NORM;
-  std::vector<glm::vec2> _TEXC;
-  std::vector<glm::uint> _INDI;
+  std::vector<glm::vec3> VERT_;
+  std::vector<glm::vec3> NORM_;
+  std::vector<glm::vec2> TEXC_;
+  std::vector<glm::uint> INDI_;
   Shader shader_;
   std::chrono::_V2::system_clock::time_point endwait3 = std::chrono::system_clock::now();
 };

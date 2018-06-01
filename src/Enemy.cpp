@@ -15,36 +15,22 @@ Enemy::~Enemy()
 void Enemy::privateInit()
 {
   shader_.loadShaders("shaders/red.vert", "shaders/red.frag");
-  //shipShader_.loadShaders("shaders/ship.vert", "shaders/ship.frag");
-  //  _texture = SOIL_load_OGL_texture
-  //  (
-  //    "/home/liha1104/Projects/spaceshooter/textures/thunder.png",
-  //    SOIL_LOAD_AUTO,
-  //    SOIL_CREATE_NEW_ID,
-  //    SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-  //  );
-  //  /* check for an error during the load process */
-  //  if (0 == _texture)
-  //  {
-  //    printf("SOIL loading error: '%s'\n", SOIL_last_result());
-  //  }
-
   objl::Loader Loader;
-  bool loadout = Loader.LoadFile("/home/liha1104/Projects/spaceshooter/src/arwing.obj");
+  bool loadout = Loader.LoadFile("src/arwing.obj");
 
   if (loadout) {
     for (int i = 0; i < Loader.LoadedMeshes.size(); i++) {
       objl::Mesh curMesh = Loader.LoadedMeshes[i];
       for (int j = 0; j < curMesh.Vertices.size(); j++) {
-        _VERT.push_back(glm::vec3(curMesh.Vertices[j].Position.X, curMesh.Vertices[j].Position.Y, curMesh.Vertices[j].Position.Z));
-        _NORM.push_back(glm::vec3(curMesh.Vertices[j].Normal.X, curMesh.Vertices[j].Normal.Y, curMesh.Vertices[j].Normal.Z));
-        _TEXC.push_back(glm::vec2(curMesh.Vertices[j].TextureCoordinate.X, curMesh.Vertices[j].TextureCoordinate.Y));
+        VERT_.push_back(glm::vec3(curMesh.Vertices[j].Position.X, curMesh.Vertices[j].Position.Y, curMesh.Vertices[j].Position.Z));
+        NORM_.push_back(glm::vec3(curMesh.Vertices[j].Normal.X, curMesh.Vertices[j].Normal.Y, curMesh.Vertices[j].Normal.Z));
+        TEXC_.push_back(glm::vec2(curMesh.Vertices[j].TextureCoordinate.X, curMesh.Vertices[j].TextureCoordinate.Y));
       }
 
       for (int j = 0; j < curMesh.Indices.size(); j += 3) {
-        _INDI.push_back(curMesh.Indices[j]);
-        _INDI.push_back(curMesh.Indices[j + 1]);
-        _INDI.push_back(curMesh.Indices[j + 2]);
+        INDI_.push_back(curMesh.Indices[j]);
+        INDI_.push_back(curMesh.Indices[j + 1]);
+        INDI_.push_back(curMesh.Indices[j + 2]);
       }
     }
   }
@@ -98,15 +84,6 @@ void Enemy::privateRender()
   }
 
   shader_.enableProgram();
-  //  float size = 5.0f;
-  //  glBegin(GL_QUADS);
-  //  // Near Face
-  //  glVertex3f(-size, -size, size);
-  //  glVertex3f(size, -size, size);
-  //  glVertex3f(size, size, size);
-  //  glVertex3f(-size, size, size);
-  //  glEnd();
-  //glutSolidSphere(8,16, 16);
 
   glDisable(GL_COLOR_MATERIAL);
 
@@ -115,14 +92,13 @@ void Enemy::privateRender()
 
   glEnable(GL_PRIMITIVE_RESTART);
 
-  glVertexPointer(3, GL_FLOAT, 0, &_VERT[0]);
-  //glNormalPointer(3, GL_FLOAT, 0 , &_NORM[0]);
-  glNormalPointer(GL_FLOAT, 0, &_NORM[0]);
+  glVertexPointer(3, GL_FLOAT, 0, &VERT_[0]);
+  glNormalPointer(GL_FLOAT, 0, &NORM_[0]);
 
   glDrawElements(GL_TRIANGLES,
-      _INDI.size(),
+      INDI_.size(),
       GL_UNSIGNED_INT,
-      &_INDI[0]);
+      &INDI_[0]);
 
   glDisable(GL_PRIMITIVE_RESTART);
 

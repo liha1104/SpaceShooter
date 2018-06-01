@@ -1,7 +1,6 @@
 #include "include/SpaceShip.hpp"
 #include <iostream>
 
-
 SpaceShip::SpaceShip()
 {
 }
@@ -28,18 +27,16 @@ float SpaceShip::getLife()
 
 void SpaceShip::privateRender()
 {
-  //glLoadIdentity();
 
+  float diffMat[] = { 1.0f, 0.0f, 0.0f };
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, diffMat);
 
-  float diffMat[] = {1.0f, 0.0f, 0.0f};
-  glMaterialfv(	GL_FRONT, GL_DIFFUSE, diffMat);
-
-  float specMat[] = {1.0f, 1.0f, 1.0f};
-  glMaterialfv(	GL_FRONT, GL_SPECULAR, specMat);
+  float specMat[] = { 1.0f, 1.0f, 1.0f };
+  glMaterialfv(GL_FRONT, GL_SPECULAR, specMat);
 
   redShader_.enableProgram();
 
-  glutSolidSphere(8,16,16);
+  glutSolidSphere(8, 16, 16);
 
   redShader_.disableProgram();
 }

@@ -1,7 +1,6 @@
- #pragma once
+#pragma once
 
 #include "SceneObject.hpp"
-
 
 class Skybox : public SceneObject {
   public:
@@ -15,15 +14,14 @@ class Skybox : public SceneObject {
   virtual void privateUpdate();
 
   private:
-  std::vector<int> _index_array;
-  std::vector<float> _vertex_array;
-  GLuint up;
-  GLuint down;
-  GLuint left;
-  GLuint right;
-  GLuint front;
-  GLuint back;
-  GLuint _skybox_id;
+  std::vector<int> index_array_;
+  std::vector<float> vertex_array_;
+  GLuint up_;
+  GLuint down_;
+  GLuint left_;
+  GLuint right_;
+  GLuint front_;
+  GLuint back_;
+  GLuint skybox_id_;
   Shader sbShader_;
-
 };

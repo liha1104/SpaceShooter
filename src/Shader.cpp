@@ -1,4 +1,4 @@
- 
+
 #include "include/Shader.hpp"
 
 /**
@@ -10,13 +10,12 @@
   *   Use getProgram to get it as a variable.
   *
   * Credits:
-  *   Based on code by Håvard Kindem and later improved upon by Daniel Salwerowicz since teacher's code didn't work.
+  *   Based on code by Håvard Kindem, later improved upon by Daniel Salwerowicz and then implemented here by Victor Lindbäck since teacher's code didn't work.
   *   https://badvertex.com/2012/11/20/how-to-load-a-glsl-shader-in-opengl-using-c.html
   *
   * @author <Victor Lindbäck>
   * Copyright Kobol Dev 2018
   */
-
 
 Shader::Shader()
 {
@@ -58,7 +57,8 @@ bool Shader::loadShaders(const char* vertexPath, const char* fragmentPath)
   const char* vertShaderSrc = vertShaderStr.c_str();
   const char* fragShaderSrc = fragShaderStr.c_str();
 
-  if(vertShaderStr.empty() || fragShaderStr.empty()) return false;
+  if (vertShaderStr.empty() || fragShaderStr.empty())
+    return false;
 
   GLint result = GL_FALSE;
   int logLength;
@@ -75,7 +75,8 @@ bool Shader::loadShaders(const char* vertexPath, const char* fragmentPath)
   glGetShaderInfoLog(vertShader, logLength, NULL, &vertShaderError[0]);
   std::cout << &vertShaderError[0] << std::endl;
 
-  if(logLength > 1) return false;
+  if (logLength > 1)
+    return false;
 
   // Compile fragment shader
   std::cout << "Compiling fragment shader." << std::endl;
@@ -89,7 +90,8 @@ bool Shader::loadShaders(const char* vertexPath, const char* fragmentPath)
   glGetShaderInfoLog(fragShader, logLength, NULL, &fragShaderError[0]);
   std::cout << &fragShaderError[0] << std::endl;
 
-  if(logLength > 1) return false;
+  if (logLength > 1)
+    return false;
 
   std::cout << "Linking program" << std::endl;
   GLuint program = glCreateProgram();
@@ -103,12 +105,13 @@ bool Shader::loadShaders(const char* vertexPath, const char* fragmentPath)
   glGetProgramInfoLog(program, logLength, NULL, &programError[0]);
   std::cout << &programError[0] << std::endl;
 
-  if(logLength > 1) return false;
+  if (logLength > 1)
+    return false;
 
   glDeleteShader(vertShader);
   glDeleteShader(fragShader);
 
-  _program = program;
+  program_ = program;
   return true;
 }
 
@@ -119,11 +122,10 @@ void Shader::disableProgram()
 
 void Shader::enableProgram()
 {
-  glUseProgram(_program);
+  glUseProgram(program_);
 }
 
 GLuint Shader::getProgram()
 {
-  return _program;
+  return program_;
 }
-

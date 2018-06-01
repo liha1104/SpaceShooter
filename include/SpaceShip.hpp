@@ -2,7 +2,6 @@
 
 #include "SceneObject.hpp"
 
-
 class SpaceShip : public SceneObject {
   public:
   SpaceShip();

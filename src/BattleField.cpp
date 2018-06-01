@@ -36,21 +36,13 @@ void BattleField::privateInit()
     printf("SOIL loading error: '%s'\n", SOIL_last_result());
   }
 
-
   mShader_.enableProgram();
 
-    GLuint _shader_height_map = glGetUniformLocation(mShader_.getProgram(), "height");
-    GLuint _shader_colour_map = glGetUniformLocation(mShader_.getProgram(), "color");
-    glUniform1i(_shader_height_map, 0);
-    glUniform1i(_shader_colour_map, 1);
+  GLuint _shader_height_map = glGetUniformLocation(mShader_.getProgram(), "height");
+  GLuint _shader_colour_map = glGetUniformLocation(mShader_.getProgram(), "color");
+  glUniform1i(_shader_height_map, 0);
+  glUniform1i(_shader_colour_map, 1);
 
-//  mShader_.enableProgram();
-//  GLint texSampler0;
-//  GLint texSampler1;
-//  texSampler0 = glGetUniformLocation(tex_hm, "height");
-//  glUniform1i(texSampler0, 0);
-//  texSampler1 = glGetUniformLocation(tex_cm, "color");
-//  glUniform1i(texSampler1, 1);
   mShader_.disableProgram();
 
   // Create vertex arrays
@@ -77,39 +69,21 @@ void BattleField::privateInit()
 void BattleField::privateRender()
 {
 
-//        GLuint color = glGetUniformLocation(map.getProg(), "color");
-//        GLuint height = glGetUniformLocation(map.getProg(), "height");
-//        map.enable();
-//        glUniform1i(color, 0);
-//        glUniform1i(height, 1);
-//        glActiveTexture(GL_TEXTURE0 + 0);
-//        glBindTexture(GL_TEXTURE_2D, colorMap);
-//        glActiveTexture(GL_TEXTURE0 + 1);
-//        glBindTexture(GL_TEXTURE_2D, heightMap);
-
-
   // activate and specify pointer to vertex array
   mShader_.enableProgram();
-  //glColor3d(1.0, 1.0, 1.0);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, tex_hm_);
   glEnable(GL_TEXTURE_2D);
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, tex_cm_);
   glEnable(GL_TEXTURE_2D);
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glEnable(GL_PRIMITIVE_RESTART);
   glPrimitiveRestartIndex(UINT_MAX);
-  //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   glVertexPointer(3, GL_FLOAT, 0, &vertexArray_[0]);
   glTexCoordPointer(2, GL_FLOAT, 0, &texArray_[0]);
-  // draw a cube
-  //glDrawElements(GL_TRIANGLE_STRIP, indexArray_.size(), GL_UNSIGNED_BYTE, &indexArray_);
   glDrawElements(GL_TRIANGLE_STRIP, indexArray_.size(), GL_UNSIGNED_INT, &indexArray_[0]);
-  // deactivate vertex arrays after drawing
   glDisable(GL_PRIMITIVE_RESTART);
   glActiveTexture(GL_TEXTURE1);
   glDisable(GL_TEXTURE_2D);

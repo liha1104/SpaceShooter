@@ -1,6 +1,5 @@
 #include "include/OBJLoader.hpp"
 
-
 bool objl::algorithm::inTriangle(objl::Vector3 point, objl::Vector3 tri1, objl::Vector3 tri2, objl::Vector3 tri3)
 {
   // Starting vars
@@ -14,19 +13,18 @@ bool objl::algorithm::inTriangle(objl::Vector3 point, objl::Vector3 tri1, objl::
   float a = 1 - y - b;
 
   // Projected point
-  Vector3  p = (a * tri1) + (b * tri2) + (y * tri3);
+  Vector3 p = (a * tri1) + (b * tri2) + (y * tri3);
 
   if (a >= 0 && a <= 1
       && b >= 0 && b <= 1
-      && y >= 0 && y <= 1)
-  {
+      && y >= 0 && y <= 1) {
     return true;
   }
   else
     return false;
 }
 
-objl::Vector3 objl::algorithm::operator*(const float &left, const objl::Vector3 &right)
+objl::Vector3 objl::algorithm::operator*(const float& left, const objl::Vector3& right)
 {
   return Vector3(right.X * left, right.Y * left, right.Z * left);
 }
@@ -51,6 +49,6 @@ float objl::math::MagnitudeV3(const objl::Vector3 in)
 objl::Vector3 objl::math::CrossV3(const objl::Vector3 a, const objl::Vector3 b)
 {
   return Vector3(a.Y * b.Z - a.Z * b.Y,
-                 a.Z * b.X - a.X * b.Z,
-                 a.X * b.Y - a.Y * b.X);
+      a.Z * b.X - a.X * b.Z,
+      a.X * b.Y - a.Y * b.X);
 }

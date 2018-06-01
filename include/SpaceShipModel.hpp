@@ -2,11 +2,8 @@
 
 #include "SceneObject.hpp"
 
-
-class SpaceShipModel : public SceneObject
-{
-public:
-
+class SpaceShipModel : public SceneObject {
+  public:
   SpaceShipModel();
   ~SpaceShipModel();
   void moveRight();
@@ -17,29 +14,17 @@ public:
   void moveForward();
   void reduceLife();
   float getLife();
+  void setLife(float);
 
-
-
-private:
+  private:
   void privateInit();
   void privateRender();
   void privateUpdate();
-
-//	GLuint _texture;
-//	GLint _texColormapSampler;
-
-  /*
-  std::vector<glm::vec3> vertices;
-  std::vector<glm::vec3> normal;
-  std::vector<glm::vec2> texCoords;
-  std::vector<glm::uint> indices;
-  */
-  std::vector<glm::vec3> _VERT;
-  std::vector<glm::vec3> _NORM;
-  std::vector<glm::vec2> _TEXC;
-  std::vector<glm::uint> _INDI;
-  GLuint _texture;
+  std::vector<glm::vec3> VERT_;
+  std::vector<glm::vec3> NORM_;
+  std::vector<glm::vec2> TEXC_;
+  std::vector<glm::uint> INDI_;
+  GLuint texture_;
   float life_ = 3;
   Shader shipShader_;
-
 };

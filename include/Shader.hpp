@@ -1,4 +1,4 @@
- 
+
 #pragma once
 
 #include <GL/glew.h>
@@ -17,13 +17,12 @@
   *   Use getProgram to get it as a variable.
   *
   * Credits:
-  *   Based on code by Håvard Kindem and later improved upon by Daniel Salwerowicz since teacher's code didn't work.
+  *   Based on code by Håvard Kindem, later improved upon by Daniel Salwerowicz and then implemented here by Victor Lindbäck since teacher's code didn't work.
   *   https://badvertex.com/2012/11/20/how-to-load-a-glsl-shader-in-opengl-using-c.html
   *
   * @author <Victor Lindbäck>
   * Copyright Kobol Dev 2018
   */
-
 
 class Shader {
   public:
@@ -37,6 +36,5 @@ class Shader {
 
   private:
   std::string readFile(const char*);
-  GLuint _program;
+  GLuint program_;
 };
-

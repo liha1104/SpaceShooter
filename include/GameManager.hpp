@@ -3,13 +3,13 @@
 #include "BattleField.hpp"
 #include "Camera.hpp"
 #include "Enemy.hpp"
-#include "SceneObject.hpp"
-#include "SpaceShip.hpp"
-#include "Weapons.hpp"
-#include "Skybox.hpp"
-#include "Water.hpp"
-#include "SpaceShipModel.hpp"
 #include "Particles.hpp"
+#include "SceneObject.hpp"
+#include "Skybox.hpp"
+#include "SpaceShip.hpp"
+#include "SpaceShipModel.hpp"
+#include "Water.hpp"
+#include "Weapons.hpp"
 #include <chrono>
 
 class GameManager : public SceneObject {
@@ -29,6 +29,8 @@ class GameManager : public SceneObject {
   bool shipColl(glm::mat4, double, glm::mat4, double);
   void invulnerability(std::shared_ptr<SpaceShipModel>);
   void splosions(glm::mat4);
+  int kills = 0;
+  bool gameOver{ false };
 
   protected:
   virtual void privateInit();

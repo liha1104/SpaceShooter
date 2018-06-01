@@ -2,7 +2,6 @@
 
 #include "SceneObject.hpp"
 
-
 class BattleField : public SceneObject {
   public:
   BattleField();
@@ -21,7 +20,4 @@ class BattleField : public SceneObject {
   GLuint tex_hm_;
   GLuint tex_cm_;
   Shader mShader_;
-
-  // normal array.
-  // texture coord array
 };

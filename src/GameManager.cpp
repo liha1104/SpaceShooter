@@ -66,7 +66,6 @@ void GameManager::privateUpdate()
 
   eternalBF();
 
-
   bool sd = false;
   bool c = false;
   for (auto en = enemies_.begin(); en != enemies_.end();) {
@@ -93,7 +92,7 @@ void GameManager::privateUpdate()
         bullets_.erase(it);
         break;
       }
-      else if (bullColl((*it)->getMatrix(), 5, (*en)->getMatrix(), 15) && (*it)->getOwner() == Weapons::owner_::ship) {
+      else if (bullColl((*it)->getMatrix(), 5, (*en)->getMatrix(), 20) && (*it)->getOwner() == Weapons::owner_::ship) {
         splosions((*it)->getMatrix());
         this->removeSubObject(*it);
         it = bullets_.erase(it);
@@ -103,6 +102,7 @@ void GameManager::privateUpdate()
     }
 
     if (sd && (*spaceshipm_).getLife() == 0) {
+      gameOver = true;
       splosions(spaceshipm_->getMatrix());
       this->removeSubObject(spaceshipm_);
     }
@@ -115,6 +115,7 @@ void GameManager::privateUpdate()
       splosions((*en)->getMatrix());
       this->removeSubObject(*en);
       enemies_.erase(en);
+      kills++;
       break;
     }
     else if (shipColl(spaceshipm_->getMatrix(), 5, (*en)->getMatrix(), 6)) {
@@ -122,6 +123,9 @@ void GameManager::privateUpdate()
       this->removeSubObject(spaceshipm_);
       this->removeSubObject(*en);
       enemies_.erase(en);
+      kills++;
+      spaceshipm_->setLife(0);
+      gameOver = true;
       break;
     }
   }
@@ -156,19 +160,18 @@ void GameManager::invulnerability(std::shared_ptr<SpaceShipModel> s)
   }
 }
 
-void GameManager::splosions(glm::mat4 pos){
+void GameManager::splosions(glm::mat4 pos)
+{
   std::shared_ptr<Particles> new_explosion;
-        new_explosion.reset(new Particles(pos));
-        particles_.push_back(new_explosion);
-        this->addSubObject(new_explosion);
-        new_explosion->getMatrix()[3] = (pos[3]);
-        if (particles_.size() > 2)
-        {
-          this->removeSubObject(*particles_.begin());
-          particles_.erase(particles_.begin());
-        }
+  new_explosion.reset(new Particles(pos));
+  particles_.push_back(new_explosion);
+  this->addSubObject(new_explosion);
+  new_explosion->getMatrix()[3] = (pos[3]);
+  if (particles_.size() > 2) {
+    this->removeSubObject(*particles_.begin());
+    particles_.erase(particles_.begin());
+  }
 }
-
 
 void GameManager::bulletFired()
 {
@@ -214,7 +217,6 @@ void GameManager::eternalBF()
     bf2_->getMatrix()[3].z -= 5120 * 2;
 }
 
-
 void GameManager::generateEnemy()
 {
   double r = rand() % 230 - 115;
@@ -224,7 +226,7 @@ void GameManager::generateEnemy()
     enemies_.push_back(enemy_);
     enemy_->init();
     enemy_->getMatrix()[3].x = r;
-    endwait2 = std::chrono::system_clock::now() + std::chrono::milliseconds(2200);
+    endwait2 = std::chrono::system_clock::now() + std::chrono::milliseconds(1800);
   }
 }
 
@@ -238,7 +240,6 @@ void GameManager::enemyShoots(std::shared_ptr<Enemy> e)
     weapon_->getMatrix()[3].x = e->getMatrix()[3].x;
     weapon_->getMatrix()[3].y = e->getMatrix()[3].y;
     weapon_->getMatrix()[3].z = e->getMatrix()[3].z;
-    //weapon_->getMatrix() = e->getMatrix();
     e->setTime(std::chrono::system_clock::now() + std::chrono::milliseconds(700));
   }
 }
