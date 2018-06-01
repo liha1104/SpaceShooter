@@ -50,7 +50,7 @@ void Enemy::privateInit()
     t = type_::zigzag;
 
   matrix_ = glm::rotate(matrix_, 3.1415926535897932384626433832795f, glm::vec3(0, 1, 0));
-  matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, 1000.0f));
+  matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, 1400.0f));
   matrix_ = glm::scale(matrix_, glm::vec3(10.0f, 10.0f, 10.0f));
 }
 
@@ -116,13 +116,13 @@ void Enemy::privateUpdate()
     dukdw = 1;
 
   if (t == type_::normal)
-    matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, -0.3f));
+    matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, -0.6f));
 
   else {
     if (dukdw)
-      matrix_ = glm::translate(matrix_, glm::vec3(-0.1f, 0.0f, -0.2));
+      matrix_ = glm::translate(matrix_, glm::vec3(-0.13f, 0.0f, -0.4));
     else
-      matrix_ = glm::translate(matrix_, glm::vec3(0.1f, 0.0f, -0.2f));
+      matrix_ = glm::translate(matrix_, glm::vec3(0.13f, 0.0f, -0.4f));
   }
 }
 

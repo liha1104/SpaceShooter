@@ -108,29 +108,29 @@ void SpaceShipModel::privateUpdate()
 void SpaceShipModel::moveRight()
 {
   if (matrix_[3].x < 110)
-    matrix_ = glm::translate(matrix_, glm::vec3(7.0f, 0.0f, 0.0f));
+    matrix_ = glm::translate(matrix_, glm::vec3(8.0f, 0.0f, 0.0f));
 }
 void SpaceShipModel::moveLeft()
 {
   if (matrix_[3].x > -110)
-    matrix_ = glm::translate(matrix_, glm::vec3(-7.0f, 0.0f, 0.0f));
+    matrix_ = glm::translate(matrix_, glm::vec3(-8.0f, 0.0f, 0.0f));
 }
 void SpaceShipModel::moveUp()
 {
-  matrix_ = glm::translate(matrix_, glm::vec3(0.0f, -7.0f, 0.0f));
+  matrix_ = glm::translate(matrix_, glm::vec3(0.0f, -8.0f, 0.0f));
 }
 void SpaceShipModel::moveDown()
 {
-  matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 7.0f, 0.0f));
+  matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 8.0f, 0.0f));
 }
 void SpaceShipModel::moveForward()
 {
   if (matrix_[3].z > -200)
-    matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, -7.0f));
+    matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, -8.0f));
 }
 
 void SpaceShipModel::moveBackward()
 {
   if (matrix_[3].z < -45)
-    matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, 7.0f));
+    matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, 8.0f));
 }

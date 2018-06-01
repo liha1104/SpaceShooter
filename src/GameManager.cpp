@@ -82,12 +82,12 @@ void GameManager::privateUpdate()
         it = bullets_.erase(it);
         invulnerability(spaceshipm_);
       }
-      else if (((*it)->getMatrix()[3].z >= -1100 && !bullColl((*it)->getMatrix(), 3, (*en)->getMatrix(), 6))
+      else if (((*it)->getMatrix()[3].z >= -1300 && !bullColl((*it)->getMatrix(), 3, (*en)->getMatrix(), 6))
           || (bullColl((*it)->getMatrix(), 3, (*en)->getMatrix(), 10) && (*it)->getOwner() == Weapons::owner_::enemy)) {
         it++;
         continue;
       }
-      else if ((*it)->getMatrix()[3].z <= -1100 || (*it)->getMatrix()[3].z >= 0) {
+      else if ((*it)->getMatrix()[3].z <= -1300 || (*it)->getMatrix()[3].z >= 0) {
         this->removeSubObject(*it);
         bullets_.erase(it);
         break;
